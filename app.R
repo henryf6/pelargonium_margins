@@ -15,8 +15,11 @@ library(dplyr)
 library(tidyr)
 library(GGally)
 
+#set directory
+if(Sys.info()['user']=='henryfrye') setwd("/Users/henryfrye/Dropbox/Intellectual_Endeavours/UConn/Research/pelargonium_margin_project/code/pelargonium_margins")
+
 #Read in data
-#margin_clim <- read.csv(file= "/data_clean/2011_margin_clim_data.csv")
+margin_clim <- read.csv(file= "../../data_clean/2011_margin_clim_data.csv")
 
 
 
@@ -37,7 +40,10 @@ ui <- fluidPage(
                       in this aspect of the South Africa Dimensions Grant funded by NSF grant DEB-1046328."),
              tags$br(),
              tags$hr(),
-             tags$b("Author: Henry Frye"))))
+             tags$b("Author: Henry Frye"))),
+    
+    tabPanel("Univariate Climate Correlations")
+    )
   
              
 )
