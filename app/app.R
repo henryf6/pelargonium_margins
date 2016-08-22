@@ -15,11 +15,34 @@ library(dplyr)
 library(tidyr)
 library(GGally)
 
-#if(Sys.info()['user']=='henryfrye') setwd("/Users/henryfrye/Dropbox/Intellectual_Endeavours/UConn/Research/ZA_Dimensions_Data/leaf_spectra")
+#Directory
+if(Sys.info()['user']=='henryfrye') setwd("/Users/henryfrye/Dropbox/IntellectualEndeavours/UConn/Research/pelargonium_margin_project")
+
+#Read in data
+margin_clim <- read.csv(file= "/data_clean/2011_margin_clim_data.csv")
+
 
 
 ui <- fluidPage(
+  fluidRow(
+    column(width=12, style = "font-size: 23pt;",
+           tags$strong("Dimensions of Biodiversity: Pelargonium Leaf Margins and Climate"))
+  ),
+  tabsetPanel(
+    tabPanel("About",
+             
+             titlePanel("About This Project"),
+             tags$hr(),
+             tags$br(), 
+             tags$body(
+               tags$p("This Shiny application allows users to interact with
+                      the data exploration and linear models used
+                      in this aspect of the South Africa Dimensions Grant funded by NSF grant DEB-1046328."),
+             tags$br(),
+             tags$hr(),
+             tags$b("Author: Henry Frye"))))
   
+             
 )
 
 
