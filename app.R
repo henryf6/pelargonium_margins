@@ -14,14 +14,16 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(GGally)
+library(ggfortify)
 
 #set directory
 if(Sys.info()['user']=='henryfrye') setwd("/Users/henryfrye/Dropbox/Intellectual_Endeavours/UConn/Research/pelargonium_margin_project/code/pelargonium_margins")
 
 #Read in data
 margin_clim <- read.csv(file= "../../data_clean/2011_margin_clim_data.csv")
-
-
+margin_chars <- as.character(colnames(margin_clim)[17:59])
+envir_chars <- as.character(colnames(margin_clim)[60:80])
+factors <- c("Major_clade", "Subclade", "Growth_form")
 
 ui <- fluidPage(
   fluidRow(
@@ -41,19 +43,78 @@ ui <- fluidPage(
              tags$br(),
              tags$hr(),
              tags$b("Author: Henry Frye"))),
-    
-    tabPanel("Univariate Climate Correlations")
+# for this page I want a model main plot the makes just the correlation with a regression line
+# then options for model summary, checks and AIC
+# I also want an option to color by clade and growthform differently
+# I want this also available for the model checks
+    tabPanel("Univariate Climate Correlations",
+             sidebarLayout(
+               sidebarPanel(
+             selectizeInput(inputId = "enviro", label = "X Axis: Environment", envir_chars),
+             selectizeInput(inputId = "margin_traits", label = "Y Axis: Margin Characters", margin_chars),
+             radioButtons(inputId = "factors", label="Color by:", choices = c(factors), selected = character(0)),
+             radioButtons(inputId = "unimodops", label = "Additional Model Options",
+                           choices = c("Model Summary", "Model Checks", "AIC Score"), selected = character(0))),
+             mainPanel(plotOutput("univarplot"),
+                      textOutput("aic"),
+             verbatimTextOutput("summary"),
+             plotOutput("checks")
+             ))
     )
   
              
-)
+))
 
 
 server <- function(input, output) ({
+  output$univarplot <- renderPlot({
+        
+        #mod <- with(margin_clim, lm(as.formula(paste(input$margin_traits," ~ ", input$enviro))))
+        #par(mfrow= c(2,2))    
+        #univarplot <- autoplot(mod, label.size = 3) + theme_minimal()
+        univarplot<- ggplot(margin_clim, aes_string(x = input$enviro, y = input$margin_traits)) + geom_point(aes_string(color = input$factors)) + geom_smooth(method=lm)
+        print(univarplot)
+  })  
+ 
+  
+   #in order to use subset within ggfortify with linear models,
+  # we need to make sure that the data has no na's for the variables
+  
+    
+  linmodel <- reactive({
+    with(margin_clim, lm(as.formula(paste0(input$margin_traits," ~ ", input$enviro))))
+  })
+  
+  output$summary <- renderPrint({
+    validate(need(input$unimodops != "-", ""))
+    linmodel <- linmodel()
+    if (input$unimodops == "Model Summary") print(summary(linmodel))
+  })
+  
+  output$checks <- renderPlot({
+    validate(need(input$unimodops != "-", ""))
+    linmodel <- linmodel()
+    if (input$unimodops == "Model Checks") 
+    autoplot(linmodel, which=1:6,  label.size = 3)
+  })
+  
+  output$aic <- renderText({
+    validate(need(input$unimodops != "-", ""))
+    linmodel <- linmodel()
+    if (input$unimodops == "AIC Score") print(AIC(linmodel))
+  })
+  
+
+  
+  
 })
 
 
 
 #Run Shiny app
 shinyApp(ui = ui, server = server)
-
+#test <- margin_clim %>% 
+#        filter(!is.na(bio1)) %>%
+#        filter(!is.na(LMA))
+#model <- lm(bio1 ~ LMA, data = margin_clim)
+#autoplot(model, data = test, colour = 'Major_clade')
