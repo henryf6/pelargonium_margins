@@ -15,6 +15,9 @@ library(dplyr)
 library(tidyr)
 library(GGally)
 library(ggfortify)
+library(rworldmap)
+library(rworldxtra)
+library(ggmap)
 
 #set directory
 if(Sys.info()['user']=='henryfrye') setwd("/Users/henryfrye/Dropbox/Intellectual_Endeavours/UConn/Research/pelargonium_margin_project/code/pelargonium_margins")
@@ -24,6 +27,11 @@ margin_clim <- read.csv(file= "../../data_clean/2011_margin_clim_data.csv")
 margin_chars <- as.character(colnames(margin_clim)[17:59])
 envir_chars <- as.character(colnames(margin_clim)[60:80])
 factors <- c("Major_clade", "Subclade", "Growth_form")
+
+#some map stuff
+myLocation <- c( lon = 21.53751, lat =  -31.85948)  
+myMap <- get_map(location=myLocation, source = "google",
+                 maptype = "satellite", zoom = 7)
 
 ui <- fluidPage(
   fluidRow(
@@ -39,7 +47,11 @@ ui <- fluidPage(
              tags$body(
                tags$p("This Shiny application allows users to interact with
                       the data exploration and linear models used
-                      in this aspect of the South Africa Dimensions Grant funded by NSF grant DEB-1046328."),
+                      in the Pelargonium Leaf Margin Project of the South Africa Dimensions of Biodiversity Grant funded by NSF grant DEB-1046328."),
+               tags$p("The first tab creates the common univariate correlations (plus many more) cited in the paleoclimate literature and
+                      gives basic color subsets and different model checks. Note that the climate variables are from WorldClim. 
+                      Next, the geographic data tab shows the geographic locations of where plants were collected and offers basic color subsets of the data"),
+               tags$p("Future updates: more data from other years of colleciton, more tabs of data exploration, and greater map control"),
              tags$br(),
              tags$hr(),
              tags$b("Author: Henry Frye"))),
@@ -60,10 +72,19 @@ ui <- fluidPage(
              verbatimTextOutput("summary"),
              plotOutput("checks")
              ))
-    )
+    ),
+
+  tabPanel("Geographic Distribution",
+           sidebarLayout(
+             sidebarPanel(
+               radioButtons(inputId = "factors2", label="Color by:",
+                            choices = c(factors), selected = character(0))),
+           mainPanel(plotOutput("map")))
+           )
+           )
   
              
-))
+)
 
 
 server <- function(input, output) ({
@@ -105,6 +126,13 @@ server <- function(input, output) ({
   })
   
 
+  output$map <- renderPlot({
+    map <- ggmap(myMap) + 
+          geom_point(data=margin_clim, aes_string(x = "GP_Long_E_adj",
+                        y = "GP_Lat_S_adj", color = input$factors2), 
+                        size = 4, shape = 18)
+    print(map)
+  })
   
   
 })
@@ -113,8 +141,32 @@ server <- function(input, output) ({
 
 #Run Shiny app
 shinyApp(ui = ui, server = server)
+
+#Scratchwork
 #test <- margin_clim %>% 
 #        filter(!is.na(bio1)) %>%
 #        filter(!is.na(LMA))
 #model <- lm(bio1 ~ LMA, data = margin_clim)
 #autoplot(model, data = test, colour = 'Major_clade')
+
+#newmap <- getMap(resolution = 'high')
+#plot(newmap, xlim = c(21,25), ylim = c(-35,-28), asp =1)
+#if (margin_clim$Major_clade == "A") {
+#points(margin_clim$GP_Long_E_adj, margin_clim$GP_Lat_S_adj, col="red", cex = .6) 
+#} else  if (margin_clim$Major_clade == "B") {
+#points(margin_clim$GP_Long_E_adj, margin_clim$GP_Lat_S_adj, col="blue", cex = .6)
+#} else 
+#points(margin_clim$GP_Long_E_adj, margin_clim$GP_Lat_S_adj, col="purple", cex = .6)
+
+#ggplot() + geom_point(data=margin_clim, aes(x = GP_Long_E_adj,
+#                                              y = GP_Lat_S_adj))
+#geocode("South AFrica")
+#myLocation <- c( lon = 21.53751, lat =  -31.85948)  
+#myMap <- get_map(location=myLocation, source = "google",
+#                 maptype = "satellite", zoom = 7)
+#ggmap(myMap, alpha = .8) + geom_point(data=margin_clim, aes(x = GP_Long_E_adj,
+#                                              y = GP_Lat_S_adj, color = Major_clade), size = 4)
+
+#myLocation = c(lon = -97.32628, lat =  37.67087)
+#myMap <- get_map(location=myLocation, source = "stamen", maptype = "watercolor", crop = FALSE)
+#ggmap(myMap)
