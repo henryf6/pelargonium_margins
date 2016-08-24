@@ -19,6 +19,7 @@ library(rworldmap)
 library(rworldxtra)
 library(ggmap)
 
+
 #set directory
 if(Sys.info()['user']=='henryfrye') setwd("/Users/henryfrye/Dropbox/Intellectual_Endeavours/UConn/Research/pelargonium_margin_project/code/pelargonium_margins")
 
@@ -127,12 +128,15 @@ server <- function(input, output) ({
   
 
   output$map <- renderPlot({
-    map <- ggmap(myMap) + 
+    map <- ggmap(myMap) +  stat_density2d(data = margin_clim, aes(x = GP_Long_E_adj,y = GP_Lat_S_adj, fill = ..level.. , alpha = ..level..), bins = 4, geom = "polygon") +
+      scale_fill_gradient(low = "black",
+                          high= "red") +
           geom_point(data=margin_clim, aes_string(x = "GP_Long_E_adj",
                         y = "GP_Lat_S_adj", color = input$factors2), 
-                        size = 4, shape = 18)
+                        size = 4, shape = 18, alpha = .25)
     print(map)
   })
+  #table(unique(margin_clim)$GP_Long_E_adj)
   
   
 })
@@ -165,7 +169,19 @@ shinyApp(ui = ui, server = server)
 #myMap <- get_map(location=myLocation, source = "google",
 #                 maptype = "satellite", zoom = 7)
 #ggmap(myMap, alpha = .8) + geom_point(data=margin_clim, aes(x = GP_Long_E_adj,
-#                                              y = GP_Lat_S_adj, color = Major_clade), size = 4)
+#                                              y = GP_Lat_S_adj, color = Major_clade, 
+#                                              alpha = ..Species..))
+
+#ggmap(myMap, alpha  = .8) +
+#  stat_density2d(data = margin_clim, aes(x = GP_Long_E_adj,y = GP_Lat_S_adj, fill = ..level.. , alpha = ..level..), bins = 4, geom = "polygon") +
+ # scale_fill_gradient(low = "black",
+  #                    high= "red") 
+  
+#ggmap(myMap, alpha  = .8) +  
+ # geom_point(data=margin_clim, aes(x = GP_Long_E_adj,
+                                 #  y = GP_Lat_S_adj, color = Major_clade, size = log(New_site_no), alpha = exp(New_site_no)))
+
+
 
 #myLocation = c(lon = -97.32628, lat =  37.67087)
 #myMap <- get_map(location=myLocation, source = "stamen", maptype = "watercolor", crop = FALSE)
