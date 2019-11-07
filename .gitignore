@@ -1,6 +1,13 @@
 .Rproj.user
 .Rhistory
 .RData
+.DS_Store
+all_data_analysis.R
+app.R
+margin_analysis.R
+margin_data_setup.R
+margin_exploratory_analysis.R
+margin_map_clade.png
 <<<<<<< HEAD
 .Ruserdata
 margin_manuscript.*
