@@ -8,10 +8,16 @@
 ## Data exploration and figure creation to determine variables of interest
 ## and appropriate analysis
 ## ******************************************************************** ##
+<<<<<<< HEAD
 rm(list = ls())
 
 #Set working directory
 if(Sys.info()['user']=='henryfrye') setwd("/Users/henryfrye/Dropbox/Intellectual_Endeavours/UConn/Research/pelargonium_margin_project/code/")
+=======
+
+#Set working directory
+if(Sys.info()['user']=='henryfrye') setwd("/Users/henryfrye/Dropbox/IntellectualEndeavours/UConn/Research/pelargonium_margin_project/scripts")
+>>>>>>> ebc54200625bf6321310882ec47edbaf12e9f0cf
 
 #Load Libraries
 library(dplyr)

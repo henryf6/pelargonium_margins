@@ -94,9 +94,13 @@ server <- function(input, output) ({
         #mod <- with(margin_clim, lm(as.formula(paste(input$margin_traits," ~ ", input$enviro))))
         #par(mfrow= c(2,2))    
         #univarplot <- autoplot(mod, label.size = 3) + theme_minimal()
+<<<<<<< HEAD
         univarplot<- ggplot(margin_clim, aes_string(x = input$enviro, y = input$margin_traits)) + geom_point(aes_string(color = input$factors)) + 
           geom_smooth(method=lm) + 
           theme_classic()
+=======
+        univarplot<- ggplot(margin_clim, aes_string(x = input$enviro, y = input$margin_traits)) + geom_point(aes_string(color = input$factors)) + geom_smooth(method=lm)
+>>>>>>> ebc54200625bf6321310882ec47edbaf12e9f0cf
         print(univarplot)
   })  
  

@@ -9,6 +9,7 @@
 ## margin climate relations
 ## ******************************************************************** ##
 
+<<<<<<< HEAD
 
 ## ******************************************************************** ##
 ####Setup####
@@ -390,3 +391,20 @@ growth_clade <- ggplot(margin_clim, aes(bio1, Number_of_Teeth._Perimeter, color=
 ggplot2:::ggsave(plot = growth_clade, filename = '../manuscripts/clade_growthform_mat_density_scatter.png')
 ggsave(plot = growth_clade, filename = '../../masters_thesis/Figures/clade_growthform_mat_density_scatter.png')
   
+=======
+#Set working directory
+if(Sys.info()['user']=='henryfrye') setwd("/Users/henryfrye/Dropbox/IntellectualEndeavours/UConn/Research/pelargonium_margin_project/scripts")
+
+#Read in data
+margin_clim <- read.csv(file= "../data_clean/2011_margin_clim_data.csv")
+
+#test basic paleo assumptions
+mod1 <- lm(formula  = bio1 ~ Number_of_Teeth._Perimeter, data = margin_clim)
+par(mfrow = c(2,2))
+plot(mod1)
+summary(mod1)
+
+mod_all_mar <- lm(bio1 ~ Number_of_Teeth._Perimeter + Tooth_Area._Perimeter + )
+
+glimpse(margin_clim)
+>>>>>>> ebc54200625bf6321310882ec47edbaf12e9f0cf
