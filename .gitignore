@@ -8,6 +8,11 @@ margin_analysis.R
 margin_data_setup.R
 margin_exploratory_analysis.R
 margin_map_clade.png
+pairs_function.R
+preliminary_stats_margin_analysis.R
+standardize_function.R
+stat_qq.R
+stat_qq_line.R
 <<<<<<< HEAD
 .Ruserdata
 margin_manuscript.*
