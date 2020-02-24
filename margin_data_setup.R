@@ -8,8 +8,6 @@
 ## Setup margin data for later analysis
 ## ******************************************************************** ##
 
-<<<<<<< HEAD
-
 ## ******************************************************************** ##
 ####SETUP####
 ## ******************************************************************** ##
@@ -140,11 +138,12 @@ mar_clim$growth_habit <- ifelse(mar_clim$Growth_form == "annual", "nonwoody",
 
 
 #select variables that will be used in submission and uploaded to Dryad
-mar_clim <- mar_clim %>% dplyr::select(UID:Plant_no,GP_Lat_S_adj, GP_Long_E_adj, Lobes_most,
-                                      Lam_thickness_mm,Number_of_Teeth._Interior_Perimeter,y,
+mar_clim <- mar_clim %>% dplyr::select(Year,Jones_assigned, Major_clade:Species,
+                                       GP_Lat_S_adj, GP_Long_E_adj, Lobes_most,
+                                      Lam_thickness_mm,Number_of_Teeth._Interior_Perimeter,
                                       bio1,bio12,pseas,cv, rainfall_category, growth_habit)
 
-write.csv(mar_clim, file = 'data_clean/final_margin_climate.csv')
+write.csv(mar_clim, file = 'data_clean/tooth_density_data.csv')
 
 
 
@@ -308,7 +307,7 @@ glimpse(mar_clim_data)
 #now create csv in cleaned data file
 
 write.csv(mar_clim_data, file= "../data_clean/2011_margin_clim_data.csv")
->>>>>>> ebc54200625bf6321310882ec47edbaf12e9f0cf
+
 
 
 

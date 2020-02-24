@@ -20,7 +20,7 @@ if(Sys.info()['user']=='henryfrye') setwd("/Users/henryfrye/Dropbox/Intellectual
 
 
 #Read in data
-mar_clim <- read.csv(file= "data_clean/final_margin_climate.csv") #this contains toooth density data for a subset
+mar_clim <- read.csv(file= "data_clean/tooth_density_data.csv") #this contains toooth density data for a subset
 all_spp_margins <- read.csv(file= "data_clean/margins_all_spp.csv") #this is the full dataset for pres/absencence
 
 #Load Libraries
